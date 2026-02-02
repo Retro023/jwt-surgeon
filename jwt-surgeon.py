@@ -22,6 +22,43 @@ def banner():
     print(banner)
 
 
+# help menu for tool
+def help_menu():
+    YELLOW = "\033[1;33m"
+    PURPLE = "\033[0;35m"
+    CYAN = "\033[0;36m"
+    END = "\033[0m"
+
+    menu = f""" 
+╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+║  					                  JWT SURGEON                       					                             ║
+║ {YELLOW}Section 1 the main menu{END}                                                                     								     ║
+║         			                    													     ║	
+║  The main menu is a simple cli menu,															     ║
+║  First select your option (enter the number in front of the option).  						                                     ║
+║  Once you have selected your option you will be greeted with that options needed information (i,e the encoded jwt token).                                  ║
+║  If you are worried about having to rerun jwt surgeon to then edit the decoded jwt values,                                                                 ║
+║  JWT surgeon will allow you to select the jwt build option straight after decoding your encoded JWT token (or you can decode another jwt token).           ║
+║																	                     ║	 
+║ {PURPLE}Section 2 JWT decoding{END}                                                                                                                                     ║														
+║                                  			                          									     ║
+║  JWT Surgeon allows you to decode a given base6 encoded jwt token.											     ║
+║  All you need to do is supply the full jwt token when prompted (be sure to submit it as one line).							     ║
+║  After which you will be shown the original jwt heaer and payload encoded and underneath that the decoded data. 					     ║
+║																			     ║
+║  {CYAN}Section 3 JWT building/editing{END}                     													     ║
+║															     				     ║
+║  JWT surgeon allows you to edit and build new JWT tokens.												     ║	
+║  As with the Decoding feature all you are required to do is submit the needed JWT data (header,payload and signature if needed).			     ║	
+║  JWT surgeon will then craft your new token!														     ║
+║   						       													     ║
+║						                                                                                                             ║
+╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+    
+    """
+    print(menu)
+
+
 # Decode JWT data and show user
 def jwt_decoding(jwt):
     try:
@@ -99,6 +136,7 @@ def main():
             # Menu options
             print("\n1. Decode JWT token")
             print("2. Craft JWT token")
+            print("9. help menu")
             print("0. Exit")
 
             # Take users choice
@@ -126,6 +164,9 @@ def main():
                 case 0:
                     print("Goodbye!")
                     break
+                case 9:
+                    help_menu()
+                    print("\n")
                 case _:
                     print("Unknown option Please choose again!")
                     continue
