@@ -3,6 +3,7 @@
 
 # Imports
 import base64
+from re import error
 
 
 # banner for the tool
@@ -23,57 +24,72 @@ def banner():
 
 # Decode JWT data and show user
 def jwt_decoding(jwt):
-    # Spliting the JWT into its core parts
-    jwt_split = jwt.split(".")
-    jwt_header = jwt_split[0]
-    jwt_payload = jwt_split[1]
+    try:
+        # Spliting the JWT into its core parts
+        jwt_split = jwt.split(".")
+        jwt_header = jwt_split[0]
+        jwt_payload = jwt_split[1]
 
-    # printing the core parts of the jwt
-    print("=" * 30)
-    print(f"Original Base64 Header: {jwt_header}")
-    print(f"Original Base64 Payload: {jwt_payload}")
+        # printing the core parts of the jwt
+        print("=" * 50)
+        print(f"Original Base64 Header: {jwt_header}")
+        print(f"Original Base64 Payload: {jwt_payload}")
+        print("=" * 50)
 
-    # Converting the jwt to a readable format
-    jwt_header_info = base64.b64decode(jwt_header + "==")
-    jwt_header_info_str_convert = str(jwt_header_info, "utf-8")
-    jwt_payload_info = base64.b64decode(jwt_payload + "==")
-    jwt_payload_info_str_convert = str(jwt_payload_info, "utf-8")
+        # Converting the jwt to a readable format
+        jwt_header_info = base64.b64decode(jwt_header + "==")
+        jwt_header_info_str_convert = str(jwt_header_info, "utf-8")
+        jwt_payload_info = base64.b64decode(jwt_payload + "==")
+        jwt_payload_info_str_convert = str(jwt_payload_info, "utf-8")
 
-    # printing the converted jwt data
-    print("=" * 30)
-    print(f"Original Header Info: {jwt_header_info_str_convert}")
-    print(f"Original Payload Info: {jwt_payload_info_str_convert}")
-    print("=" * 30)
+        # printing the converted jwt data
+        print("=" * 50)
+        print(f"Original Header Info: {jwt_header_info_str_convert}")
+        print(f"Original Payload Info: {jwt_payload_info_str_convert}")
+        print("=" * 50)
+    except IndexError as e:
+        print(f"\nError JWT is too small! Please resubmit your JWT: {e}")
+    except ValueError as e:
+        print(f"\nError ValueError: {e}")
+    except Exception as e:
+        print(f"\nError Unknown: {e}")
 
 
 # base64 encode the jwt token
 def base64url_encode(data: str) -> str:
-    return (
-        base64.urlsafe_b64encode(data.encode("utf-8"))
-        .replace(b"=", b"")
-        .decode("utf-8")
-    )
+    try:
+        return (
+            base64.urlsafe_b64encode(data.encode("utf-8"))
+            .replace(b"=", b"")
+            .decode("utf-8")
+        )
+    except Exception as e:
+        print(f"Error encoding JWT: {e}")
 
 
 # take users header, payload, and signature
 def Build_jwt(header: str, payload: str, signature: str | None = None) -> str:
-    # base64 encode the header and payload
-    header_b64 = base64url_encode(header)
-    payload_b64 = base64url_encode(payload)
+    try:
+        # base64 encode the header and payload
+        header_b64 = base64url_encode(header)
+        payload_b64 = base64url_encode(payload)
 
-    # apply the signature if it has one
-    if signature:
-        jwt = f"{header_b64}.{payload_b64}.{signature}"
-    else:
-        jwt = f"{header_b64}.{payload_b64}."
+        # apply the signature if it has one
+        if signature:
+            jwt = f"{header_b64}.{payload_b64}.{signature}"
+        else:
+            jwt = f"{header_b64}.{payload_b64}."
 
-    # print the jwt token
-    print("=" * 30)
-    print("Here is your new jwt token")
-    print(jwt)
-    print("=" * 30)
+        # print the jwt token
+        print("=" * 50)
+        print("Here is your new jwt token")
+        print(jwt)
+        print("=" * 50)
+    except Exception as e:
+        print(f"Error Unknown {e}")
 
 
+# Main
 def main():
     try:
         banner()
@@ -81,7 +97,7 @@ def main():
         print("Main Menu!")
         while True:
             # Menu options
-            print("1. Decode JWT token")
+            print("\n1. Decode JWT token")
             print("2. Craft JWT token")
             print("0. Exit")
 
@@ -110,6 +126,10 @@ def main():
                 case 0:
                     print("Goodbye!")
                     break
+                case _:
+                    print("Unknown option Please choose again!")
+                    continue
+
     except KeyboardInterrupt:
         print("\nUser Exited... Goodbye!")
 
